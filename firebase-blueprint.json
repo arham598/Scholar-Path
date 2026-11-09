@@ -1,0 +1,175 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Student academic and personal profile for eligibility evaluation",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "nationality": { "type": "string", "maxLength": 60 },
+        "countryOfResidence": { "type": "string", "maxLength": 60 },
+        "dateOfBirth": { "type": "string", "maxLength": 20 },
+        "currentEducationLevel": { "type": "string", "maxLength": 50 },
+        "matricMarks": { "type": "string", "maxLength": 20 },
+        "matricTotal": { "type": "string", "maxLength": 20 },
+        "matricPercentage": { "type": "number" },
+        "interMarks": { "type": "string", "maxLength": 20 },
+        "interTotal": { "type": "string", "maxLength": 20 },
+        "interPercentage": { "type": "number" },
+        "currentUniversity": { "type": "string", "maxLength": 120 },
+        "currentDegree": { "type": "string", "maxLength": 100 },
+        "desiredDegree": { "type": "string", "maxLength": 100 },
+        "preferredCountries": { "type": "array" },
+        "familyIncomeRange": { "type": "string", "maxLength": 60 },
+        "passportStatus": { "type": "string", "maxLength": 40 },
+        "englishTestType": { "type": "string", "maxLength": 40 },
+        "englishScore": { "type": "string", "maxLength": 30 },
+        "extracurriculars": { "type": "string", "maxLength": 1500 },
+        "achievementsAndProjects": { "type": "string", "maxLength": 1500 },
+        "fundingRequirement": { "type": "string", "maxLength": 50 },
+        "role": { "type": "string", "maxLength": 20 },
+        "createdAt": { "type": "string", "maxLength": 40 },
+        "updatedAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["fullName", "email", "nationality", "currentEducationLevel"]
+    },
+    "Scholarship": {
+      "title": "Scholarship",
+      "description": "Official scholarship opportunity with published criteria",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "name": { "type": "string", "maxLength": 200 },
+        "provider": { "type": "string", "maxLength": 150 },
+        "country": { "type": "string", "maxLength": 80 },
+        "destinationFlag": { "type": "string", "maxLength": 10 },
+        "degreeLevels": { "type": "array" },
+        "eligibleNationalities": { "type": "array" },
+        "minPercentage": { "type": "number" },
+        "academicRequirements": { "type": "string", "maxLength": 1000 },
+        "ageRestrictions": { "type": "string", "maxLength": 300 },
+        "languageRequirements": { "type": "string", "maxLength": 500 },
+        "fundingCoverage": { "type": "string", "maxLength": 50 },
+        "fundingDetails": { "type": "string", "maxLength": 1000 },
+        "applicationOpeningDate": { "type": "string", "maxLength": 30 },
+        "applicationClosingDate": { "type": "string", "maxLength": 30 },
+        "requiredDocuments": { "type": "array" },
+        "officialApplicationUrl": { "type": "string", "maxLength": 500 },
+        "sourceUrl": { "type": "string", "maxLength": 500 },
+        "isVerified": { "type": "boolean" },
+        "isExpired": { "type": "boolean" },
+        "isDemo": { "type": "boolean" },
+        "lastVerifiedDate": { "type": "string", "maxLength": 40 },
+        "verifiedBy": { "type": "string", "maxLength": 150 },
+        "createdAt": { "type": "string", "maxLength": 40 },
+        "updatedAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["id", "name", "provider", "country", "fundingCoverage", "officialApplicationUrl", "applicationClosingDate"]
+    },
+    "SavedScholarship": {
+      "title": "SavedScholarship",
+      "description": "User saved scholarship with status and deadline tracking",
+      "type": "object",
+      "properties": {
+        "scholarshipId": { "type": "string", "maxLength": 100 },
+        "scholarshipName": { "type": "string", "maxLength": 200 },
+        "country": { "type": "string", "maxLength": 80 },
+        "savedAt": { "type": "string", "maxLength": 40 },
+        "deadline": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "maxLength": 40 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "reminderSet": { "type": "boolean" }
+      },
+      "required": ["scholarshipId", "scholarshipName", "savedAt", "status"]
+    },
+    "DocumentChecklistItem": {
+      "title": "DocumentChecklistItem",
+      "description": "Applicant document preparation status and file reference",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "documentType": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 150 },
+        "status": { "type": "string", "maxLength": 40 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "fileName": { "type": "string", "maxLength": 255 },
+        "fileSize": { "type": "string", "maxLength": 40 },
+        "updatedAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["id", "documentType", "title", "status"]
+    },
+    "ApplicationDraft": {
+      "title": "ApplicationDraft",
+      "description": "Generated AI motivation letters, SOPs, and scholarship drafts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "maxLength": 50 },
+        "scholarshipId": { "type": "string", "maxLength": 100 },
+        "scholarshipName": { "type": "string", "maxLength": 200 },
+        "title": { "type": "string", "maxLength": 200 },
+        "content": { "type": "string", "maxLength": 10000 },
+        "createdAt": { "type": "string", "maxLength": 40 },
+        "updatedAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["id", "type", "title", "content"]
+    },
+    "NotificationItem": {
+      "title": "NotificationItem",
+      "description": "User notification alert for deadlines within 7 days and matching scholarship opportunities",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 500 },
+        "scholarshipId": { "type": "string", "maxLength": 100 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["id", "type", "title", "message", "read"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Designated administrator identity record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "maxLength": 30 },
+        "assignedAt": { "type": "string", "maxLength": 40 }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Student profile data containing academic and eligibility information"
+    },
+    "/scholarships/{scholarshipId}": {
+      "schema": "Scholarship",
+      "description": "Published scholarships with verified eligibility criteria and deadlines"
+    },
+    "/users/{userId}/savedScholarships/{scholarshipId}": {
+      "schema": "SavedScholarship",
+      "description": "Subcollection of scholarships bookmarked or tracked by the student"
+    },
+    "/users/{userId}/documents/{docId}": {
+      "schema": "DocumentChecklistItem",
+      "description": "Subcollection tracking student application document readiness"
+    },
+    "/users/{userId}/drafts/{draftId}": {
+      "schema": "ApplicationDraft",
+      "description": "Subcollection containing AI generated scholarship application documents"
+    },
+    "/users/{userId}/notifications/{notifId}": {
+      "schema": "NotificationItem",
+      "description": "Subcollection of scholarship deadline and matching alerts"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Admins authorized to manage verified scholarship listings"
+    }
+  }
+}

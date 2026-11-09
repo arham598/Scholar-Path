@@ -1,0 +1,6 @@
+{
+  "name": "ScholarPath — Global Scholarship Finder & Application Assistant",
+  "description": "Discover verified scholarships in Pakistan and worldwide, check eligibility with transparent criteria matching, manage application documents, track deadlines, and generate customized application drafts with AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

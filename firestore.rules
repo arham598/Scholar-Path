@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'kashifarham096@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUserProfile(data) {
+      return data.fullName is string && data.fullName.size() <= 100 &&
+             data.email is string && data.email.size() <= 150 &&
+             (!('nationality' in data) || (data.nationality is string && data.nationality.size() <= 60)) &&
+             (!('matricMarks' in data) || (data.matricMarks is string && data.matricMarks.size() <= 20)) &&
+             (!('interMarks' in data) || (data.interMarks is string && data.interMarks.size() <= 20)) &&
+             (!('extracurriculars' in data) || (data.extracurriculars is string && data.extracurriculars.size() <= 1500)) &&
+             (!('achievementsAndProjects' in data) || (data.achievementsAndProjects is string && data.achievementsAndProjects.size() <= 1500));
+    }
+
+    function isValidScholarship(data) {
+      return data.name is string && data.name.size() <= 200 &&
+             data.provider is string && data.provider.size() <= 150 &&
+             data.country is string && data.country.size() <= 80 &&
+             data.officialApplicationUrl is string && data.officialApplicationUrl.size() <= 500 &&
+             data.fundingCoverage is string && data.fundingCoverage.size() <= 50;
+    }
+
+    // Publicly readable scholarships, manageable only by verified administrators
+    match /scholarships/{scholarshipId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(scholarshipId) && isValidScholarship(incoming());
+      allow delete: if isAdmin() && isValidId(scholarshipId);
+    }
+
+    // Student Profiles (Strictly isolated by user identity)
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) &&
+                       (!('role' in incoming()) || incoming().role != 'admin' || isAdmin());
+      allow update: if (isOwner(userId) || isAdmin()) && isValidId(userId) && isValidUserProfile(incoming()) &&
+                       (!('role' in incoming()) || incoming().role == existing().role || isAdmin());
+      allow delete: if isOwner(userId) || isAdmin();
+
+      // Student Saved Scholarships subcollection
+      match /savedScholarships/{scholarshipId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(scholarshipId);
+      }
+
+      // Student Document Checklist subcollection
+      match /documents/{docId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(docId);
+      }
+
+      // Student Application Drafts subcollection
+      match /drafts/{draftId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(draftId);
+      }
+
+      // Student Notifications subcollection
+      match /notifications/{notifId} {
+        allow read, write: if (isOwner(userId) || isAdmin()) && isValidId(notifId);
+      }
+    }
+
+    // Admins list
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(adminId);
+    }
+  }
+}
